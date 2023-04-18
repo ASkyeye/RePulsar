@@ -6,6 +6,7 @@ SRVNETSTOPCLIENT SrvNetStopClient;
 SRVNETDEREGISTERCLIENT SrvNetDeregisterClient;
 HANDLE SrvNetHandle = 0;
 NTSTATUS RegisterSrvNetEndpoint(){
+	PVOID test;
 	SRVNETREGISTERCLIENT SrvNetRegisterClient;
 	SRVNETSTARTCLIENT SrvNetStartClient;
 	NTSTATUS status;
@@ -24,6 +25,7 @@ NTSTATUS RegisterSrvNetEndpoint(){
 			}
 		}
 	}
+
 	return STATUS_SUCCESS;
 }
 NTSTATUS DeregisterSrvNetEndpoint(){

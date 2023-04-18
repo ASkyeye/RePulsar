@@ -19,11 +19,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="RePulsar.inf">
-      <Filter>Driver Files</Filter>
-    </Inf>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="callbackdef.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,9 +31,33 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shellinject.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scrape.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shellinject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="section.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="signaturescan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="intern_structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

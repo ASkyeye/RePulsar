@@ -76,7 +76,7 @@ NTSTATUS GetModuleByName(
 
 	if (NT_SUCCESS(status))
 	{
-		PRTL_MODULE_EXTENDED_INFO pDrivers = (PRTL_MODULE_EXTENDED_INFO)ExAllocatePoolWithTag(PagedPool, size, "MuDa");
+		PRTL_MODULE_EXTENDED_INFO pDrivers = (PRTL_MODULE_EXTENDED_INFO)ExAllocatePoolWithTag(PagedPool, size, "RePu");
 
 		if (NULL == pDrivers)
 		{
@@ -102,7 +102,7 @@ NTSTATUS GetModuleByName(
 
 		}
 
-		ExFreePoolWithTag(pDrivers, "MuDa");
+		ExFreePoolWithTag(pDrivers, "RePu");
 	}
 
 	return status;
