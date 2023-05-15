@@ -39,6 +39,7 @@ At the time of its appearance, it works stably on:
 - Windows 10 1809
 - Windows 10 2004
 - Windows 10 21H2
+
 Inspired by the [smbdoor](https://github.com/loneicewolf/smbdoor) project
 
 ## Functional
